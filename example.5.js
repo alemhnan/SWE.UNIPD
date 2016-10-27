@@ -34,7 +34,7 @@ const longJobP = (time, id) =>
 console.log('--A--');
 
 
-Promise.resolve('')
+Promise.resolve()
 
   .then((myResult) => {
     console.log(myResult);
