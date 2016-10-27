@@ -1,50 +1,58 @@
-/*jshint node: true, -W032, newcap:false */
-'use strict';
+const Promise = require('bluebird');
 
-var Promise = require('bluebird');
+const longJob = (time, id, callback) => {
+  console.log(`Start:   ${id}`);
 
-var longJob = function(time, id, callback) {
-    console.log('Start:   ' + id);
-
-    setTimeout(function() {
-        var result = 'Done:    ' + id;
-        callback(null, result);
-      }, time);
-
+  setTimeout(() => {
+    const result = `Done:    ${id}`;
+    callback(null, result);
+  }, time);
 };
 
-var longJobP = function (time, id) {
-    var deferred = Promise.pending();
-    longJob(time, id, function(err ,result){
-        deferred.resolve(result);
+// const longJobLongP = (time, id) => {
+//   return new Promise((resolve, reject) => {
+//     longJob(time, id, (err, result) => {
+//       if (err) {
+//         return reject(err);
+//       }
+//       return resolve(result);
+//     });
+//   });
+// };
+
+const longJobP = (time, id) =>
+  new Promise((resolve, reject) => {
+    longJob(time, id, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
     });
-    return deferred.promise;
-};
+  });
+
 
 console.log('--A--');
 
 
 Promise.resolve('')
 
-.then(function(myResult){
+  .then((myResult) => {
     console.log(myResult);
     return longJobP(1000, 'ONE');
-})
+  })
 
-.then(function(myResult){
+  .then((myResult) => {
     console.log(myResult);
     return longJobP(2000, 'TWO');
-})
+  })
 
 
-.then(function(myResult){
+  .then((myResult) => {
     console.log(myResult);
+  })
 
-})
-
-.catch(function(err){
+  .catch((err) => {
     console.log(err);
-
-});
+  });
 
 console.log('--B--');

@@ -1,14 +1,20 @@
 {
   "name": "swe.nodejs.examples",
-  "version": "2015.0.0",
+  "version": "2015.1.0",
   "description": "Nodejs examples: callbacks and promises",
   "dependencies": {
     "bluebird": "3.4.6",
-    "express": "4.14.0"
+    "eslint-plugin-import": "2.0.1",
+    "express": "4.14.0",
+    "typescript": "2.0.6"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "3.8.1",
+    "eslint-config-airbnb": "12.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "./node_modules/.bin/eslint ."
   },
   "repository": {
     "type": "git",
