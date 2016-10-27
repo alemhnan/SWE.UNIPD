@@ -1,0 +1,23 @@
+{
+  "name": "swe.nodejs.examples",
+  "version": "2015.0.0",
+  "description": "Nodejs examples: callbacks and promises",
+  "dependencies": {
+    "bluebird": "3.4.6",
+    "express": "4.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alemhnan/SWE.UNIPD.git"
+  },
+  "author": "Alessandro Maccagnan <alessandro.maccagnan@gmail.com> (http://www.redbabel.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alemhnan/SWE.UNIPD/issues"
+  },
+  "homepage": "https://github.com/alemhnan/SWE.UNIPD#readme"
+}
