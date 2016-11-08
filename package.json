@@ -1,6 +1,6 @@
 {
   "name": "swe.nodejs.examples",
-  "version": "2015.1.0",
+  "version": "2016.0.0",
   "description": "Nodejs examples: callbacks and promises: what's next?",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
