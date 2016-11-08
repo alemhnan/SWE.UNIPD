@@ -6,6 +6,9 @@
     "rules": {
         "no-console": [
             "off"
+        ],
+        "yoda": [
+            "off"
         ]
     }
 }
