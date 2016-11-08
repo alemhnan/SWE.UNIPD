@@ -7,27 +7,36 @@ const sleep = (time) => {
   }
 };
 
-const longJob = (time, id, callback) => {
-  console.log(`Start:   ${id}`);
-
+const longAdd = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} + ${b}`);
   process.nextTick(() => {
-    sleep(time);
-    const result = `Done:    ${id}`;
-    callback(null, result);
+    sleep(1000);
+    console.log(`Done thinking about: ${a} + ${b}`);
+    const sum = a + b;
+    callback(null, sum);
+  });
+};
+
+const longMultiply = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} * ${b}`);
+  process.nextTick(() => {
+    sleep(1000);
+    console.log(`Done thinking about: ${a} * ${b}`);
+    const sum = a * b;
+    callback(null, sum);
   });
 };
 
 console.log('--A--');
 
-longJob(2000, 'TWO', (err, anotherResult) => {
-  console.log(anotherResult);
+longAdd(2, 3, (err, result) => {
+  console.log(result);
 });
 
 console.log('--B--');
 
-longJob(1000, 'ONE', (err, myResult) => {
-  console.log(myResult);
+longMultiply(4, 5, (err, result) => {
+  console.log(result);
 });
 
 console.log('--C--');
-

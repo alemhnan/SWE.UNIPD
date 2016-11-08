@@ -1,32 +1,29 @@
-const longJob = (time, id, callback) => {
-  console.log(`Start:   ${id}`);
-
+const longAdd = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} + ${b}`);
   setTimeout(() => {
-    const result = `Done:    ${id}`;
-    callback(null, result);
-  }, time);
+    console.log(`Done thinking about: ${a} + ${b}`);
+    const sum = a + b;
+    callback(null, sum);
+  }, 2000);
+};
+
+const longMultiply = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} * ${b}`);
+  setTimeout(() => {
+    console.log(`Done thinking about: ${a} * ${b}`);
+    const sum = a * b;
+    callback(null, sum);
+  }, 2000);
 };
 
 console.log('--A--');
 
-longJob(1000, 'ONE', (errOne, myResult) => {
-  console.log(myResult);
+longAdd(2, 3, (errOne, resultOne) => {
+  console.log(resultOne);
 
-  longJob(2000, 'TWO', (errTwo, anotherResult) => {
-    console.log(anotherResult);
+  longMultiply(resultOne, 4, (errTwo, resultTwo) => {
+    console.log(resultTwo);
   });
 });
-
 
 console.log('--B--');
-
-longJob(2000, 'TWO', (errOne, myResult) => {
-  console.log(myResult);
-
-  longJob(1000, 'ONE', (errTwo, anotherResult) => {
-    console.log(anotherResult);
-  });
-});
-
-
-console.log('--C--');

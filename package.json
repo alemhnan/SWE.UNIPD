@@ -1,20 +1,25 @@
 {
   "name": "swe.nodejs.examples",
   "version": "2015.1.0",
-  "description": "Nodejs examples: callbacks and promises",
+  "description": "Nodejs examples: callbacks and promises: what's next?",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "./node_modules/.bin/eslint .",
+    "example": "node --harmony example. %2 .js",
+    "rana": "echo example.js $N=1"
+  },
   "dependencies": {
     "bluebird": "3.4.6",
     "eslint-plugin-import": "2.0.1",
     "express": "4.14.0",
     "typescript": "2.0.6"
   },
+  "engines": {
+    "node": "7.x.x"
+  },
   "devDependencies": {
     "eslint": "3.8.1",
     "eslint-config-airbnb": "12.0.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "./node_modules/.bin/eslint ."
   },
   "repository": {
     "type": "git",

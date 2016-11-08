@@ -1,28 +1,17 @@
 const Promise = require('bluebird');
 
-const longJob = (time, id, callback) => {
-  console.log(`Start:   ${id}`);
-
+const longAdd = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} + ${b}`);
   setTimeout(() => {
-    const result = `Done:    ${id}`;
-    callback(null, result);
-  }, time);
+    console.log(`Done thinking about: ${a} + ${b}`);
+    const sum = a + b;
+    callback(null, sum);
+  }, 1000);
 };
 
-// const longJobLongP = (time, id) => {
-//   return new Promise((resolve, reject) => {
-//     longJob(time, id, (err, result) => {
-//       if (err) {
-//         return reject(err);
-//       }
-//       return resolve(result);
-//     });
-//   });
-// };
-
-const longJobP = (time, id) =>
+const longAddP = (a, b) =>
   new Promise((resolve, reject) => {
-    longJob(time, id, (err, result) => {
+    longAdd(a, b, (err, result) => {
       if (err) {
         return reject(err);
       }
@@ -30,29 +19,30 @@ const longJobP = (time, id) =>
     });
   });
 
+const longMultiply = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} * ${b}`);
+  setTimeout(() => {
+    console.log(`Done thinking about: ${a} * ${b}`);
+    const sum = a * b;
+    callback(null, sum);
+  }, 1000);
+};
+
+const longMultiplyP = (a, b) =>
+  new Promise((resolve, reject) => {
+    longMultiply(a, b, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
+    });
+  });
 
 console.log('--A--');
 
-
 Promise.resolve()
-
-  .then((myResult) => {
-    console.log(myResult);
-    return longJobP(1000, 'ONE');
-  })
-
-  .then((myResult) => {
-    console.log(myResult);
-    return longJobP(2000, 'TWO');
-  })
-
-
-  .then((myResult) => {
-    console.log(myResult);
-  })
-
-  .catch((err) => {
-    console.log(err);
-  });
+  .then(() => longAddP(2, 3))
+  .then(result => longMultiplyP(result, 4))
+  .then(result => console.log(result));
 
 console.log('--B--');

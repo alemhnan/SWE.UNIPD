@@ -7,22 +7,27 @@ const sleep = (time) => {
   }
 };
 
-const longJob = (time, id) => {
-  console.log(`Start:   ${id}`);
-  sleep(time);
-  const result = `Done:    ${id}`;
-  return result;
+const longAdd = (a, b) => {
+  console.log(`Thinking about:      ${a} + ${b}`);
+  sleep(1000);
+  console.log(`Done thinking about: ${a} + ${b}`);
+
+  const sum = a + b;
+  return sum;
 };
 
+const longMultiply = (a, b) => {
+  console.log(`Thinking about:      ${a} * ${b}`);
+  sleep(1000);
+  console.log(`Done thinking about: ${a} * ${b}`);
 
-console.log('--A--');
+  const sum = a * b;
+  return sum;
+};
 
-const anotherResult = longJob(2000, 'TWO');
-console.log(anotherResult);
+const s = longAdd(2, 3);
+console.log(s);
 
-console.log('--B--');
+const p = longMultiply(4, s);
+console.log(p);
 
-const myResult = longJob(1000, 'ONE');
-console.log(myResult);
-
-console.log('--C--');

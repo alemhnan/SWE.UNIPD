@@ -1,20 +1,17 @@
 const Promise = require('bluebird');
-const express = require('express');
 
-const app = express();
-
-const longJob = (time, id, callback) => {
-  console.log(`Start:   ${id}`);
-
+const longAdd = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} + ${b}`);
   setTimeout(() => {
-    const result = `Done:    ${id}`;
-    callback(null, result);
-  }, time);
+    console.log(`Done thinking about: ${a} + ${b}`);
+    const sum = a + b;
+    callback(null, sum);
+  }, 1000);
 };
 
-const longJobP = (time, id) =>
+const longAddP = (a, b) =>
   new Promise((resolve, reject) => {
-    longJob(time, id, (err, result) => {
+    longAdd(a, b, (err, result) => {
       if (err) {
         return reject(err);
       }
@@ -22,30 +19,38 @@ const longJobP = (time, id) =>
     });
   });
 
-// http://127.0.0.1:3000/
-app.get('/', (req, res) => {
-  console.log('Hello World');
-  return res.status(200).json({ data: 'Hello World' });
-});
+const longMultiply = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} * ${b}`);
+  setTimeout(() => {
+    console.log(`Done thinking about: ${a} * ${b}`);
+    const sum = a * b;
+    callback(null, sum);
+  }, 1000);
+};
 
-// http://127.0.0.1:3000/long/10000/ten
-// http://127.0.0.1:3000/long/5000/five
-app.get('/long/:ms/:id', (req, res) => {
-  const ms = parseInt(req.params.ms, 10);
-  const id = req.params.id;
+const longMultiplyP = (a, b) =>
+  new Promise((resolve, reject) => {
+    longMultiply(a, b, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
+    });
+  });
 
-  return longJobP(ms, id)
-    .then((myResult) => {
-      console.log(myResult);
+// const composition = () =>
+//   Promise.resolve()
+//     .then(() => longAddP(2, 3))
+//     .then(result => longMultiplyP(result, 4));
 
-      const data = { myResult, ms, id };
-      return res.status(200).json(data);
-    })
-    .catch(err => res.status(500).json({ error: err }));
-});
+const composition = async () => {
+  const sum = await longAddP(2, 3);
+  const product = await longMultiplyP(sum, 4);
+  return product;
+};
 
-const server = app.listen(3000, () => {
-  const port = server.address().port;
-  console.log('Example app listening at http://127.0.0.1:%s', port);
-});
+console.log('--A--');
 
+composition().then(result => console.log(result));
+
+console.log('--B--');
