@@ -5,10 +5,10 @@ const noop = () => { };
 
 /**
  * Active sleep
- * Only for demonstrative purpose
+ * For demonstration purposes only
  **/
 const sleep = (time) => {
-  console.log(`Active sleep ${time / 1000}s`);
+  console.log(`Blocking sleep ${time / 1000}s`);
   const stop = new Date().getTime();
   while (new Date().getTime() < stop + time) {
     noop();
@@ -20,7 +20,7 @@ const sleep = (time) => {
  **/
 const longAdd = (a, b) => {
   console.log(`Thinking about:      ${a} + ${b}`);
-  sleep(2000);
+  sleep(3000);
   console.log(`Done thinking about: ${a} + ${b}`);
 
   const sum = a + b;
@@ -32,26 +32,35 @@ const longAdd = (a, b) => {
  **/
 const longMultiply = (a, b) => {
   console.log(`Thinking about:      ${a} * ${b}`);
-  sleep(2000);
+  sleep(1000);
   console.log(`Done thinking about: ${a} * ${b}`);
 
   const sum = a * b;
   return sum;
 };
 
+console.log('--A--');
+
 const sum = longAdd(2, 3);
-console.log(sum);
+console.log(`Sum: ${sum}`);
+
+console.log('--B--');
 
 const product = longMultiply(4, sum);
-console.log(product);
+console.log(`Product: ${product}`);
+
+console.log('--C--');
 
 /**
- * Thinking about:      2 + 3
- * Active sleep 2s
- * Done thinking about: 2 + 3
- * 5
- * Thinking about:      4 * 5
- * Active sleep 2s
- * Done thinking about: 4 * 5
- * 20
+  --A--
+  Thinking about:      2 + 3
+  Blocking sleep 3s
+  Done thinking about: 2 + 3
+  Sum: 5
+  --B--
+  Thinking about:      4 * 5
+  Blocking sleep 1s
+  Done thinking about: 4 * 5
+  Product: 20
+  --C--
  **/

@@ -17,7 +17,7 @@ const noop = () => { };
  * Only for demonstrative purpose
  */
 const sleep = (time) => {
-  console.log(`Active sleep ${time / 1000}s`);
+  console.log(`Blocking sleep ${time / 1000}s`);
   const stop = new Date().getTime();
   while (new Date().getTime() < stop + time) {
     noop();
@@ -25,13 +25,13 @@ const sleep = (time) => {
 };
 
 /**
- * One second addition, non-blocking using process.next()
+ * One second addition, non-blocking using process.nextTick()
  **/
 const longAdd = (a, b, callback) => {
   console.log(`Thinking about:      ${a} + ${b}`);
 
   process.nextTick(() => {
-    sleep(2000);
+    sleep(3000);
     console.log(`Done thinking about: ${a} + ${b}`);
     const sum = a + b;
     callback(null, sum);
@@ -39,13 +39,13 @@ const longAdd = (a, b, callback) => {
 };
 
 /**
- * One second multiplication, non-blocking using process.next()
+ * One second multiplication, non-blocking using process.nextTick()
  **/
 const longMultiply = (a, b, callback) => {
   console.log(`Thinking about:      ${a} * ${b}`);
 
   process.nextTick(() => {
-    sleep(2000);
+    sleep(1000);
     console.log(`Done thinking about: ${a} * ${b}`);
     const sum = a * b;
     callback(null, sum);
@@ -54,28 +54,28 @@ const longMultiply = (a, b, callback) => {
 
 console.log('--A--');
 
-longAdd(2, 3, (err, result) => {
-  console.log(result);
+longAdd(2, 3, (err, sum) => {
+  console.log(`Sum: ${sum}`);
 });
 
 console.log('--B--');
 
-longMultiply(4, 5, (err, result) => {
-  console.log(result);
+longMultiply(4, 5, (err, product) => {
+  console.log(`Product: ${product}`);
 });
 
 console.log('--C--');
 
 /**
- * --A--
- * Thinking about:      2 + 3
- * --B--
- * Thinking about:      4 * 5
- * --C--
- * Active sleep 2s
- * Done thinking about: 2 + 3
- * 5
- * Active sleep 2s
- * Done thinking about: 4 * 5
- * 20
+  --A--
+  Thinking about:      2 + 3
+  --B--
+  Thinking about:      4 * 5
+  --C--
+  Blocking sleep 3s
+  Done thinking about: 2 + 3
+  Sum: 5
+  Blocking sleep 1s
+  Done thinking about: 4 * 5
+  Product: 20
  **/

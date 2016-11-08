@@ -19,11 +19,13 @@ const Promise = require('bluebird');
  **/
 const longAdd = (a, b, callback) => {
   console.log(`Thinking about:      ${a} + ${b}`);
+  console.log('Non blocking sleep 3s');
+
   setTimeout(() => {
     console.log(`Done thinking about: ${a} + ${b}`);
     const sum = a + b;
     callback(null, sum);
-  }, 1000);
+  }, 3000);
 };
 
 /**
@@ -46,6 +48,8 @@ const longAddP = (a, b) =>
  **/
 const longMultiply = (a, b, callback) => {
   console.log(`Thinking about:      ${a} * ${b}`);
+  console.log('Non blocking sleep 1s');
+
   setTimeout(() => {
     console.log(`Done thinking about: ${a} * ${b}`);
     const sum = a * b;
@@ -68,21 +72,32 @@ const longMultiplyP = (a, b) =>
     });
   });
 
-console.log('--A--');
-
 Promise.resolve()
-  .then(() => longAddP(2, 3))
-  .then(result => longMultiplyP(result, 4))
-  .then(result => console.log(result));
 
-console.log('--B--');
+  .then(() => console.log('--A--'))
+
+  .then(() => longAddP(2, 3))
+
+  .then((sum) => {
+    console.log(`Sum: ${sum}`);
+    console.log('--B--');
+    return longMultiplyP(sum, 4);
+  })
+
+  .then(product => console.log(`Product: ${product}`))
+
+  .then(() => console.log('--C--'));
 
 /**
- * --A--
- * --B--
- * Thinking about:      2 + 3
- * Done thinking about: 2 + 3
- * Thinking about:      5 * 4
- * Done thinking about: 5 * 4
- * 20
+  --A--
+  Thinking about:      2 + 3
+  Non blocking sleep 3s
+  Done thinking about: 2 + 3
+  Sum: 5
+  --B--
+  Thinking about:      5 * 4
+  Non blocking sleep 1s
+  Done thinking about: 5 * 4
+  Product: 20
+  --C--
  **/

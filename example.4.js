@@ -12,12 +12,12 @@
  **/
 const longAdd = (a, b, callback) => {
   console.log(`Thinking about:      ${a} + ${b}`);
-  console.log('Passive sleep 2s');
+  console.log('Non blocking sleep 3s');
   setTimeout(() => {
     console.log(`Done thinking about: ${a} + ${b}`);
     const sum = a + b;
     callback(null, sum);
-  }, 2000);
+  }, 3000);
 };
 
 /**
@@ -25,36 +25,39 @@ const longAdd = (a, b, callback) => {
  **/
 const longMultiply = (a, b, callback) => {
   console.log(`Thinking about:      ${a} * ${b}`);
-  console.log('Passive sleep 2s');
+  console.log('Non blocking sleep 1s');
 
   setTimeout(() => {
     console.log(`Done thinking about: ${a} * ${b}`);
     const sum = a * b;
     callback(null, sum);
-  }, 2000);
+  }, 1000);
 };
 
 console.log('--A--');
 
-longAdd(2, 3, (errOne, resultOne) => {
-  console.log(resultOne);
+longAdd(2, 3, (errOne, sum) => {
+  console.log(`Sum: ${sum}`);
 
-  longMultiply(resultOne, 4, (errTwo, resultTwo) => {
-    console.log(resultTwo);
+  console.log('--B--');
+
+  longMultiply(sum, 4, (errTwo, product) => {
+    console.log(`Product: ${product}`);
   });
 });
 
-console.log('--B--');
+console.log('--C--');
 
 /**
- * --A--
- * Thinking about:      2 + 3
- * Passive sleep 2s
- * --B--
- * Done thinking about: 2 + 3
- * 5
- * Thinking about:      5 * 4
- * Passive sleep 2s
- * Done thinking about: 5 * 4
- * 20
+  --A--
+  Thinking about:      2 + 3
+  Non blocking sleep 3s
+  --C--
+  Done thinking about: 2 + 3
+  Sum: 5
+  --B--
+  Thinking about:      5 * 4
+  Non blocking sleep 1s
+  Done thinking about: 5 * 4
+  Product: 20
  **/
