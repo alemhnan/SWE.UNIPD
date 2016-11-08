@@ -5,8 +5,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "./node_modules/.bin/eslint .",
-    "example": "node --harmony example. %2 .js",
-    "rana": "echo example.js $N=1"
+    "example.1": "node example.1.js",
+    "example.2": "node example.2.js",
+    "example.3": "node example.3.js",
+    "example.4": "node example.4.js",
+    "example.5": "node example.5.js",
+    "example.6": "node --harmony example.6.js"
   },
   "dependencies": {
     "bluebird": "3.4.6",
