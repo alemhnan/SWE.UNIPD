@@ -1,61 +1,97 @@
-/*jshint node: true, -W032, newcap:false */
-'use strict';
+const node7 = require('semver').satisfies('7.0.0', process.version);
 
-var Promise = require('bluebird');
-var express = require('express');
-var app = express();
+const esStagingEnabled = (0 === process.execArgv.indexOf('--es_staging'));
 
-var longJob = function(time, id, callback) {
-    console.log('Start:   ' + id);
+if (false === node7 || false === esStagingEnabled) {
+  console.log(`Node version: ${process.version}`);
+  console.log(`Flag --es_staging: ${esStagingEnabled}`);
+  throw new Error('This example requires Nodejs version 7 or above launched with --es_staging flag');
+}
 
-    setTimeout(function() {
-        var result = 'Done:    ' + id;
-        callback(null, result);
-      }, time);
+const Promise = require('bluebird');
 
+
+/**
+ * One second addition, non-blocking using setTimeout()
+ **/
+const longAdd = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} + ${b}`);
+  setTimeout(() => {
+    console.log(`Done thinking about: ${a} + ${b}`);
+    const sum = a + b;
+    callback(null, sum);
+  }, 1000);
 };
 
-var longJobP = function (time, id) {
-    var deferred = Promise.pending();
-    longJob(time, id, function(err ,result){
-        deferred.resolve(result);
+/**
+ * Promisification of longAdd
+ * We are using an anti-pattern for simplicity
+ * http://bluebirdjs.com/docs/anti-patterns.html#the-explicit-construction-anti-pattern
+ */
+const longAddP = (a, b) =>
+  new Promise((resolve, reject) => {
+    longAdd(a, b, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
     });
-    return deferred.promise;
+  });
+
+/**
+ * One second multiplication, non-blocking using setTimeout()
+ **/
+const longMultiply = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} * ${b}`);
+  setTimeout(() => {
+    console.log(`Done thinking about: ${a} * ${b}`);
+    const sum = a * b;
+    callback(null, sum);
+  }, 1000);
 };
 
+/**
+ * Promisification of longMultiply
+ * We are using an anti-pattern for simplicity
+ * http://bluebirdjs.com/docs/anti-patterns.html#the-explicit-construction-anti-pattern
+ */
+const longMultiplyP = (a, b) =>
+  new Promise((resolve, reject) => {
+    longMultiply(a, b, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
+    });
+  });
 
-// http://127.0.0.1:3000/
-app.get('/', function (req, res) {
-	console.log('Hello World');
-	return res.status(200).json({ data: 'Hello World' });
-});
+/**
+ * Async/Await example.
+ * Only avalaible in Nodejs version 7.0.0 or above AND enabled with flag --es_staging
+ *
+ * `Async/Await are features that allow an asynchronous, non-blocking method call
+ * to be performed in a similar way to an ordinary synchronous method call.`
+ * Source: https://en.wikipedia.org/wiki/Await
+ */
+const composition = async () => {
+  const sum = await longAddP(2, 3);
+  const product = await longMultiplyP(sum, 4);
+  return product;
+};
 
-// http://127.0.0.1:3000/long/10000/ten
-// http://127.0.0.1:3000/long/5000/five
-app.get('/long/:ms/:id', function (req, res) {
-	var ms = parseInt(req.params.ms);
-	var id = req.params.id;
+console.log('--A--');
 
-	return longJobP(ms, id)
-	.then(function(myResult){
-		console.log(myResult);
+composition().then(result => console.log(result));
 
-		var data = {
-			myResult : myResult,
-			ms       : ms,
-			id       : id
-		}
-		return res.status(200).json(data);
-	})
-	.catch(function(err){
-		return res.status(500).json({error: err});
-	});
-
-});
+console.log('--B--');
 
 
-var server = app.listen(3000, function () {
-	var port = server.address().port;
-	console.log('Example app listening at http://127.0.0.1:%s', port);
-});
-
+/**
+ * --A--
+ * Thinking about:      2 + 3
+ * --B--
+ * Done thinking about: 2 + 3
+ * Thinking about:      5 * 4
+ * Done thinking about: 5 * 4
+ * 20
+ **/

@@ -1,0 +1,14 @@
+{
+    "installedESLint": true,
+    "extends": [
+        "airbnb/base"
+    ],
+    "rules": {
+        "no-console": [
+            "off"
+        ],
+        "yoda": [
+            "off"
+        ]
+    }
+}

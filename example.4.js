@@ -1,40 +1,60 @@
-/*jshint node: true, -W032 */
-'use strict';
+/**
+ * Nota bene:
+ * `The callback will likely not be invoked in precisely delay milliseconds.
+ * Node.js makes no guarantees about the exact timing of when callbacks will fire,
+ * nor of their ordering.
+ * The callback will be called as close as possible to the time specified.`
+ * Source: https://nodejs.org/api/timers.html#timers_settimeout_callback_delay_args
+ **/
 
+/**
+ * One second addition, non-blocking using setTimeout()
+ **/
+const longAdd = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} + ${b}`);
+  console.log('Passive sleep 2s');
+  setTimeout(() => {
+    console.log(`Done thinking about: ${a} + ${b}`);
+    const sum = a + b;
+    callback(null, sum);
+  }, 2000);
+};
 
-var longJob = function(time, id, callback) {
-    console.log('Start:   ' + id);
+/**
+ * One second multiplication, non-blocking using setTimeout()
+ **/
+const longMultiply = (a, b, callback) => {
+  console.log(`Thinking about:      ${a} * ${b}`);
+  console.log('Passive sleep 2s');
 
-    setTimeout(function() {
-        var result = 'Done:    ' + id;
-        callback(null, result);
-      }, time);
-
+  setTimeout(() => {
+    console.log(`Done thinking about: ${a} * ${b}`);
+    const sum = a * b;
+    callback(null, sum);
+  }, 2000);
 };
 
 console.log('--A--');
 
-longJob(1000, 'ONE', function(err, myResult){
-    console.log(myResult);
+longAdd(2, 3, (errOne, resultOne) => {
+  console.log(resultOne);
 
-    longJob(2000, 'TWO', function(err, anotherResult){
-        console.log(anotherResult);
-    });
-
+  longMultiply(resultOne, 4, (errTwo, resultTwo) => {
+    console.log(resultTwo);
+  });
 });
-
 
 console.log('--B--');
 
-longJob(2000, 'TWO', function(err, myResult){
-    console.log(myResult);
-
-    longJob(1000, 'ONE', function(err, anotherResult){
-        console.log(anotherResult);
-    });
-
-});
-
-
-
-console.log('--C--');
+/**
+ * --A--
+ * Thinking about:      2 + 3
+ * Passive sleep 2s
+ * --B--
+ * Done thinking about: 2 + 3
+ * 5
+ * Thinking about:      5 * 4
+ * Passive sleep 2s
+ * Done thinking about: 5 * 4
+ * 20
+ **/

@@ -1,29 +1,57 @@
-/*jshint node: true, -W032 */
-'use strict';
+/**
+ * No operation
+ **/
+const noop = () => { };
 
-function sleep(time) {
-    var stop = new Date().getTime();
-    while(new Date().getTime() < stop + time) {
-        ;
-    }
+/**
+ * Active sleep
+ * Only for demonstrative purpose
+ **/
+const sleep = (time) => {
+  console.log(`Active sleep ${time / 1000}s`);
+  const stop = new Date().getTime();
+  while (new Date().getTime() < stop + time) {
+    noop();
+  }
 };
 
-var longJob = function(time, id) {
-    console.log('Start:   ' + id);
-    sleep(time);
-    var result = 'Done:    ' + id;
-    return result;
+/**
+ * One second addition, blocking
+ **/
+const longAdd = (a, b) => {
+  console.log(`Thinking about:      ${a} + ${b}`);
+  sleep(2000);
+  console.log(`Done thinking about: ${a} + ${b}`);
+
+  const sum = a + b;
+  return sum;
 };
 
+/**
+ * One second multiplication, blocking
+ **/
+const longMultiply = (a, b) => {
+  console.log(`Thinking about:      ${a} * ${b}`);
+  sleep(2000);
+  console.log(`Done thinking about: ${a} * ${b}`);
 
-console.log('--A--');
+  const sum = a * b;
+  return sum;
+};
 
-var anotherResult = longJob(2000, 'TWO');
-console.log(anotherResult);
+const sum = longAdd(2, 3);
+console.log(sum);
 
-console.log('--B--');
+const product = longMultiply(4, sum);
+console.log(product);
 
-var myResult = longJob(1000, 'ONE');
-console.log(myResult);
-
-console.log('--C--');
+/**
+ * Thinking about:      2 + 3
+ * Active sleep 2s
+ * Done thinking about: 2 + 3
+ * 5
+ * Thinking about:      4 * 5
+ * Active sleep 2s
+ * Done thinking about: 4 * 5
+ * 20
+ **/
